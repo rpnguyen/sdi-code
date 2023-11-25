@@ -143,3 +143,5 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij+all
+# Ignore Gradle build output directory
+build
