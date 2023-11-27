@@ -29,8 +29,13 @@ class CacheClusterTest {
         consistentHash.printRing(KEYS);
     }
 
-    // TODO rendezvous hash
-    // TODO redo consistent hash but without treemap!! just use a sortedset and regular "min gte" binary search
+    @Test
+    void rendezvousHash() {
+        RendezvousHash rendezvousHash = new RendezvousHash(new ArrayList<>(asList("server_0", "server_1", "server_2")));
+        rendezvousHash.printRing(KEYS);
 
+        rendezvousHash.addServer("server_3");
+        rendezvousHash.printRing(KEYS);
+    }
     // TODO: ADD THIS NOTE SOMEWHERE -> if you need a sorted list you can index into for binary search, you really want a treemap (sorts on insert) and get a list view of it
 }

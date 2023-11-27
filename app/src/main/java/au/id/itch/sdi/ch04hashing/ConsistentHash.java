@@ -11,7 +11,8 @@ public class ConsistentHash implements CacheCluster {
 
 
     /**
-     * serverHash => serverName
+     * serverHash => serverName.
+     * Keeping it sorted by serverHash allows for O(logn) lookup
      */
     private final TreeMap<Integer, String> ring;
 
@@ -26,6 +27,8 @@ public class ConsistentHash implements CacheCluster {
     @Override
     public String getServerName(String key) {
         int keyHash = f(key);
+        ring.navigableKeySet().toArray();
+
         return ring.get(
                 // wrap around to start
                 firstNonNull(ring.ceilingKey(keyHash), ring.firstKey())
