@@ -1,4 +1,4 @@
-package au.id.itch.sdi.ch04hashing;
+package au.id.itch.sdi.ch05hashing;
 
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-class CacheClusterTest {
+class ServerClusterTest {
 
     private static final List<String> KEYS = List.of("foo", "bar", "baz", "qux", "quux", "corge");
 

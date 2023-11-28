@@ -1,13 +1,11 @@
-package au.id.itch.sdi.ch03ratelimiter;
+package au.id.itch.sdi.ch04ratelimiter;
 
 import org.junit.jupiter.api.Test;
 import org.threeten.extra.MutableClock;
 
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjuster;
 
-import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

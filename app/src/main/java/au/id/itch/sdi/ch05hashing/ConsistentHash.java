@@ -1,4 +1,4 @@
-package au.id.itch.sdi.ch04hashing;
+package au.id.itch.sdi.ch05hashing;
 
 import com.google.common.hash.Hashing;
 
@@ -7,8 +7,7 @@ import java.util.*;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class ConsistentHash implements CacheCluster {
-
+public class ConsistentHash implements ServerCluster {
 
     /**
      * serverHash => serverName.

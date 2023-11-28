@@ -1,10 +1,10 @@
-package au.id.itch.sdi.ch04hashing;
+package au.id.itch.sdi.ch05hashing;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NaiveModuloHash implements CacheCluster {
+public class NaiveModuloHash implements ServerCluster {
 
     private final List<String> serverNames;
 

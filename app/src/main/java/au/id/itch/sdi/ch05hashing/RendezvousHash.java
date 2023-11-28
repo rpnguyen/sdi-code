@@ -1,4 +1,4 @@
-package au.id.itch.sdi.ch04hashing;
+package au.id.itch.sdi.ch05hashing;
 
 import com.google.common.hash.Hashing;
 
@@ -11,7 +11,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * being preferred over consistent hashing. Recent examples of its use include the Github load balancer, the Apache Ignite
  * distributed database, and by the Twitter EventBus pub/sub platform.
  */
-public class RendezvousHash implements CacheCluster {
+public class RendezvousHash implements ServerCluster {
 
     private final List<String> serverNames;
 
