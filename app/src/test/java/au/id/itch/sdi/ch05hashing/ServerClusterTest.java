@@ -37,5 +37,4 @@ class ServerClusterTest {
         rendezvousHash.addServer("server_3");
         rendezvousHash.printRing(KEYS);
     }
-    // TODO: ADD THIS NOTE SOMEWHERE -> if you need a sorted list you can index into for binary search, you really want a treemap (sorts on insert) and get a list view of it
 }

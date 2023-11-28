@@ -14,19 +14,19 @@ import java.util.TreeMap;
  * <p>
  * - MemTable (tree structured map)
  * - flushed to SSTableSegments (age-sorted list)
- *      - of SSTables (key-sorted immutable map)
+ * - of SSTables (key-sorted immutable map)
  */
 public class KeyValNode implements KeyVal {
 
     static final String TOMBSTONE = "🪦";
 
-    final TreeMap<String, String> memtable;
+    final MemTable memTable;
 
     // Ordered by time
     final Deque<SSTable> ssTableSegments;
 
     public KeyValNode() {
-        memtable = new TreeMap<>();
+        memTable = new MemTable(new TreeMap<>());
         ssTableSegments = new ArrayDeque<>();
     }
 
@@ -34,15 +34,15 @@ public class KeyValNode implements KeyVal {
     public void put(String key, String value) {
         // Omitted: write-ahead log for durability
 
-        if (memtable.size() >= 3) {
+        if (memTable.size() >= 3) {
             SSTable newSSTable = new SSTable(ImmutableSortedMap.<String, String>naturalOrder()
-                    .putAll(memtable)
+                    .putAll(memTable.tree)
                     .build());
             ssTableSegments.push(newSSTable);
-            memtable.clear();
+            memTable.clear();
         }
 
-        memtable.put(key, value);
+        memTable.put(key, value);
 
         // Omitted: SSTable compaction and leveling
     }
@@ -56,7 +56,7 @@ public class KeyValNode implements KeyVal {
 
     @Override
     public String get(String key) {
-        String val = memtable.get(key);
+        String val = memTable.get(key);
 
         for (SSTable ssTableSegment : ssTableSegments) {
             if (val != null) break;
@@ -69,6 +69,34 @@ public class KeyValNode implements KeyVal {
                 : val;
     }
 
+    @RequiredArgsConstructor
+    static class MemTable implements KeyVal {
+        final TreeMap<String, String> tree;
+
+        @Override
+        public void put(String key, String value) {
+            tree.put(key, value);
+        }
+
+        @Override
+        public void delete(String key) {
+            tree.remove(key);
+        }
+
+        @Override
+        public String get(String key) {
+            return tree.get(key);
+        }
+
+        public void clear() {
+            tree.clear();
+        }
+
+        public int size() {
+            return tree.size();
+        }
+    }
+
     /**
      * Sorted strings table - immutable table of keyvals.
      * Since it's sorted, it can be done efficiently
@@ -79,13 +107,7 @@ public class KeyValNode implements KeyVal {
         /**
          * Not a tree, it's a sorted list under the covers!
          */
-        final ImmutableSortedMap<String, String> entries;
-
-        @Override
-        public String get(String key) {
-            // Omitted: bloom filter to improve performance
-            return entries.get(key); // Binary search under the covers
-        }
+        final ImmutableSortedMap<String, String> sortedMap;
 
         @Override
         public void put(String key, String value) {
@@ -95,6 +117,17 @@ public class KeyValNode implements KeyVal {
         @Override
         public void delete(String key) {
             throw new UnsupportedOperationException("SSTables are immutable!!");
+        }
+
+        @Override
+        public String get(String key) {
+            // Omitted: bloom filter to improve performance (early return null)
+            // Omitted: sparse index to further improve lookup into the sorted collection
+            return sortedMap.get(key); // Binary search under the covers
+        }
+
+        public int size() {
+            return sortedMap.size();
         }
     }
 }
