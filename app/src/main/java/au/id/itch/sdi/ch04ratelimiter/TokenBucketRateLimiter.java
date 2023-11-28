@@ -5,15 +5,15 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class TokenBucketRateLimiter implements RateLimiter {
-    private final int bucketSize;
-    private final int refillRate;
-    private final Clock clock;
+    final int bucketSize;
+    final int refillRate;
+    final Clock clock;
 
-    private long currTokens;
+    long currTokens;
     /**
      * Optimization: instead of requiring a poller, just track last updated time and refill accordingly
      */
-    private Instant lastUpdatedTime;
+    Instant lastUpdatedTime;
 
     public TokenBucketRateLimiter(int bucketSize, int refillRate, Clock clock) {
         this.bucketSize = bucketSize;

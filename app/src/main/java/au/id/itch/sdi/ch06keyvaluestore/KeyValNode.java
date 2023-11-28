@@ -34,15 +34,15 @@ public class KeyValNode implements KeyVal {
     public void put(String key, String value) {
         // Omitted: write-ahead log for durability
 
-        if (memTable.size() >= 3) {
+        memTable.put(key, value);
+
+        if (memTable.size() >= 4) {
             SSTable newSSTable = new SSTable(ImmutableSortedMap.<String, String>naturalOrder()
                     .putAll(memTable.tree)
                     .build());
             ssTableSegments.push(newSSTable);
             memTable.clear();
         }
-
-        memTable.put(key, value);
 
         // Omitted: SSTable compaction and leveling
     }

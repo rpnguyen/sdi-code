@@ -8,11 +8,11 @@ import java.util.TreeMap;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class FixedWindowCounterRateLimiter implements RateLimiter {
-    private static final ChronoUnit FIXED_WINDOW_UNIT = MINUTES;
-    private final long limitPerWindow;
-    private final Clock clock;
+    static final ChronoUnit FIXED_WINDOW_UNIT = MINUTES;
+    final long limitPerWindow;
+    final Clock clock;
 
-    private final TreeMap<Instant, Long> windows;
+    final TreeMap<Instant, Long> windows;
 
     public FixedWindowCounterRateLimiter(int limitPerWindow, Clock clock) {
         this.limitPerWindow = limitPerWindow;

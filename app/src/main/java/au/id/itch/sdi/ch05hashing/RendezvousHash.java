@@ -8,12 +8,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Because of its simplicity, lower overhead, and generality (it works for any k < n), rendezvous hashing is increasingly
- * being preferred over consistent hashing. Recent examples of its use include the Github load balancer, the Apache Ignite
+ * being preferred over consistent hashing. Recent examples of its use include the GitHub load balancer, the Apache Ignite
  * distributed database, and by the Twitter EventBus pub/sub platform.
  */
 public class RendezvousHash implements ServerCluster {
 
-    private final List<String> serverNames;
+    final List<String> serverNames;
 
     public RendezvousHash(List<String> serverNames) {
         this.serverNames = serverNames;
@@ -60,7 +60,7 @@ public class RendezvousHash implements ServerCluster {
         }
     }
 
-    private static int f(String key) {
+    static int f(String key) {
         return Hashing.murmur3_128().hashString(key, UTF_8).asInt();
     }
 }

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class KeyValCluster implements KeyVal {
-    private final ConsistentHash consistentHash;
-    private final HashMap<String, KeyValNode> nodeMap;
+    final ConsistentHash consistentHash;
+    final HashMap<String, KeyValNode> nodeMap;
 
     public KeyValCluster() {
         nodeMap = new HashMap<>();
@@ -33,7 +33,7 @@ public class KeyValCluster implements KeyVal {
         return nodeMap.get(server(key)).get(key);
     }
 
-    private String server(String key) {
+    String server(String key) {
         String server = consistentHash.getServerName(key);
         System.out.println("Key " + key + " mapped to " + server);
         return server;

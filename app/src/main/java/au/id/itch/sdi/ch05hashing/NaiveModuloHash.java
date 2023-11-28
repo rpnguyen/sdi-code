@@ -6,7 +6,7 @@ import java.util.List;
 
 public class NaiveModuloHash implements ServerCluster {
 
-    private final List<String> serverNames;
+    final List<String> serverNames;
 
     public NaiveModuloHash(List<String> serverNames) {
         this.serverNames = serverNames;

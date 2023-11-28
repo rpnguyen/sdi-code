@@ -13,7 +13,7 @@ public class ConsistentHash implements ServerCluster {
      * serverHash => serverName.
      * Keeping it sorted by serverHash allows for O(logn) lookup
      */
-    private final TreeMap<Integer, String> ring;
+    final TreeMap<Integer, String> ring;
 
     public ConsistentHash(List<String> serverNames) {
         ring = new TreeMap<>();
@@ -26,7 +26,6 @@ public class ConsistentHash implements ServerCluster {
     @Override
     public String getServerName(String key) {
         int keyHash = f(key);
-        ring.navigableKeySet().toArray();
 
         return ring.get(
                 // wrap around to start
@@ -68,7 +67,7 @@ public class ConsistentHash implements ServerCluster {
         }
     }
 
-    private static int f(String key) {
+    static int f(String key) {
         return Hashing.murmur3_128().hashString(key, UTF_8).asInt();
     }
 }
