@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * <p>
  * - MemTable (tree structured map)
  * - flushed to SSTableSegments (age-sorted list)
- * - of SSTables (key-sorted immutable map)
+ * --> of SSTables (key-sorted immutable map)
  */
 public class KeyValNode implements KeyVal {
 
