@@ -1,7 +1,6 @@
 package au.id.itch.sdi.ch06keyvaluestore;
 
 import com.google.common.collect.ImmutableSortedMap;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -69,10 +68,7 @@ public class KeyValNode implements KeyVal {
                 : val;
     }
 
-    @RequiredArgsConstructor
-    static class MemTable implements KeyVal {
-        final TreeMap<String, String> tree;
-
+    record MemTable(TreeMap<String, String> tree) implements KeyVal {
         @Override
         public void put(String key, String value) {
             tree.put(key, value);
@@ -100,14 +96,10 @@ public class KeyValNode implements KeyVal {
     /**
      * Sorted strings table - immutable table of keyvals.
      * Since it's sorted, it can be done efficiently
+     *
+     * @param sortedMap Not a tree, it's a sorted list under the covers!
      */
-    @RequiredArgsConstructor
-    static class SSTable implements KeyVal {
-
-        /**
-         * Not a tree, it's a sorted list under the covers!
-         */
-        final ImmutableSortedMap<String, String> sortedMap;
+    record SSTable(ImmutableSortedMap<String, String> sortedMap) implements KeyVal {
 
         @Override
         public void put(String key, String value) {
