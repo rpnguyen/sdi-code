@@ -7,12 +7,14 @@ import java.util.Random;
 public class UrlShortenerImpl implements UrlShortener {
 
     final Map<Long, UrlPair> db;
+    final Map<String, Long> longUrlReverseIndex;
     final Random random;
-    final HashMap<Character, Integer> b62ToInt;
-    final HashMap<Integer, Character> intToB62;
+    final Map<Character, Integer> b62ToInt;
+    final Map<Integer, Character> intToB62;
 
     public UrlShortenerImpl() {
         db = new HashMap<>();
+        longUrlReverseIndex = new HashMap<>();
         random = new Random();
 
         b62ToInt = new HashMap<>();
@@ -26,10 +28,16 @@ public class UrlShortenerImpl implements UrlShortener {
 
     @Override
     public String shorten(String longUrl) {
+        Long existingId = longUrlReverseIndex.get(longUrl);
+        if (existingId != null) {
+            return db.get(existingId).shortUrl();
+        }
+
         long id = random.nextLong((long) Math.pow(62, 7));
         String shortUrl = base62Encode(id);
 
         db.put(id, new UrlPair(shortUrl, longUrl));
+        longUrlReverseIndex.put(longUrl, id);
         return shortUrl;
     }
 
@@ -45,15 +53,18 @@ public class UrlShortenerImpl implements UrlShortener {
     String base62Encode(long l) {
         StringBuilder sb = new StringBuilder();
 
+        long curr = l;
         while (true) {
-            sb.insert(0, intToB62.get((int) (l % 62)));
-            if (l > 62) {
-                l /= 62;
+            sb.insert(0, intToB62.get((int) (curr % 62)));
+            if (curr > 62) {
+                curr /= 62;
             } else {
                 break;
             }
         }
-        return sb.toString();
+        String s = sb.toString();
+        System.out.println("encoded " + l + " => " + s);
+        return s;
     }
 
     long base62Decode(String s) {
@@ -62,6 +73,7 @@ public class UrlShortenerImpl implements UrlShortener {
             l *= 62;
             l += b62ToInt.get(c);
         }
+        System.out.println("decoded " + s + " => " + l);
         return l;
     }
 

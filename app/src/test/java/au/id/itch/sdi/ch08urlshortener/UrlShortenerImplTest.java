@@ -2,15 +2,30 @@ package au.id.itch.sdi.ch08urlshortener;
 
 import org.junit.jupiter.api.Test;
 
-import java.nio.ByteBuffer;
 import java.util.Random;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UrlShortenerImplTest {
 
-    private Random random = new Random();
+    private final Random random = new Random();
+
+    @Test
+    void urlShorten() {
+        UrlShortenerImpl urlShortener = new UrlShortenerImpl();
+        String longUrl = "google.com";
+        String shortUrl = urlShortener.shorten(longUrl);
+        assertThat(urlShortener.lengthen(shortUrl)).isEqualTo(longUrl);
+    }
+
+    @Test
+    void shouldReturnSameShortUrlForSameLongUrl() {
+        UrlShortenerImpl urlShortener = new UrlShortenerImpl();
+        String longUrl = "google.com";
+        String shortUrl1 = urlShortener.shorten(longUrl);
+        String shortUrl2 = urlShortener.shorten(longUrl);
+        assertThat(shortUrl1).isEqualTo(shortUrl2);
+    }
 
     @Test
     void b62EncodeDecode() {
@@ -19,7 +34,6 @@ class UrlShortenerImplTest {
             long l = random.nextLong((long) Math.pow(62, 7));
             String encoded = urlShortener.base62Encode(l);
             long decoded = urlShortener.base62Decode(encoded);
-            System.out.println(l + " => " + encoded + " => " + decoded);
             assertThat(decoded).isEqualTo(l);
         }
     }
