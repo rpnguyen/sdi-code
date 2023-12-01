@@ -9,7 +9,7 @@ import static java.util.Arrays.asList;
 
 class ServerClusterTest {
 
-    private static final List<String> KEYS = List.of("foo", "bar", "baz", "qux", "quux", "corge");
+    static final List<String> KEYS = List.of("foo", "bar", "baz", "qux", "quux", "corge");
 
     @Test
     void naiveModuloHash() {

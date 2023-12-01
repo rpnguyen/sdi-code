@@ -8,7 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class Base62UrlShortenerTest {
 
-    private final Random random = new Random();
+    final Random random = new Random();
 
     @Test
     void base62EncodeDecode() {

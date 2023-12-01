@@ -164,7 +164,7 @@ class RateLimiterTest {
         assertThat(slidingWindowCounter.call()).isFalse();
     }
 
-    private static TemporalAdjuster time(String text) {
+    static TemporalAdjuster time(String text) {
         return t -> t.with(LocalTime.parse(text));
     }
 
