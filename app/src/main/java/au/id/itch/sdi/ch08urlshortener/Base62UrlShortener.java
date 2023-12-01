@@ -7,15 +7,13 @@ import java.util.Map;
 import java.util.Random;
 
 public class Base62UrlShortener implements UrlShortener {
-
+    static final Random RANDOM = new Random();
     final Map<Long, UrlPair> db;
     final Map<String, Long> longUrlReverseIndex;
-    final Random random;
 
     public Base62UrlShortener() {
         db = new HashMap<>();
         longUrlReverseIndex = new HashMap<>();
-        random = new Random();
     }
 
     @Override
@@ -26,24 +24,22 @@ public class Base62UrlShortener implements UrlShortener {
             return db.get(existingId).shortUrl();
         }
 
-        Long id = null;
-        int i = 0;
-        while (i < 10 && id == null) {
-            long randomId = random.nextLong((long) Math.pow(62, 7));
-            if (!db.containsKey(randomId)) {
-                id = randomId;
-            }
-            i++;
-        }
-        if (id == null) {
-            throw new IllegalStateException("Couldn't find a good ID");
-        }
-
+        long id = generateUniqueId();
         String shortUrl = Base62.encode(id);
 
         db.put(id, new UrlPair(shortUrl, longUrl));
         longUrlReverseIndex.put(longUrl, id);
         return shortUrl;
+    }
+
+    long generateUniqueId() {
+        for (int i = 0; i < 10; i++) {
+            long randomId = RANDOM.nextLong((long) Math.pow(62, 7));
+            if (!db.containsKey(randomId)) {
+                return randomId;
+            }
+        }
+        throw new IllegalStateException("Couldn't find a good ID");
     }
 
     @Override
